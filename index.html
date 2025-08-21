@@ -1,0 +1,1076 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wearora - Premium Comfort Clothing</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #fff;
+            overflow-x: hidden;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 1rem 2rem;
+            transition: all 0.3s ease;
+        }
+
+        nav.scrolled {
+            background: rgba(255, 255, 255, 0.98);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            position: relative;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .nav-links a:hover {
+            color: #ff6b6b;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .cart-icon {
+            position: relative;
+            cursor: pointer;
+            font-size: 1.5rem;
+            transition: transform 0.3s ease;
+        }
+
+        .cart-icon:hover {
+            transform: scale(1.1);
+        }
+
+        .cart-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #e74c3c;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Pages */
+        .page {
+            display: none;
+            min-height: 100vh;
+            padding-top: 80px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s ease;
+        }
+
+        .page.active {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Home Page */
+        .hero {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+            color: white;
+            padding: 100px 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="75" cy="75" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="50" cy="10" r="0.5" fill="rgba(255,255,255,0.1)"/></pattern></defs><rect width="100%" height="100%" fill="url(%23grain)"/></svg>');
+            opacity: 0.3;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            animation: fadeInUp 1s ease 0.2s both;
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+            animation: fadeInUp 1s ease 0.4s both;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 15px 40px;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            animation: fadeInUp 1s ease 0.6s both;
+            backdrop-filter: blur(10px);
+        }
+
+        .cta-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .features {
+            padding: 100px 2rem;
+            background: #f8f9fa;
+        }
+
+        .features-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 3rem;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Shop Page */
+        .shop-header {
+            background: linear-gradient(135deg, #e17055 0%, #d63031 100%);
+            color: white;
+            padding: 60px 2rem;
+            text-align: center;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            padding: 50px 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            cursor: pointer;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+        }
+
+        .product-image {
+            height: 250px;
+            background: linear-gradient(45deg, #f8f9fa, #e9ecef);
+            display: flex;
+            /* align-items: center; */
+            justify-content: center;
+            font-size: 4rem;
+            color: #ff6b6b;
+            position: relative;
+            /* overflow: hidden; */
+        }
+
+        .product-image::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(255, 107, 107, 0.1), rgba(238, 90, 36, 0.1));
+        }
+
+        .product-info {
+            padding: 1.5rem;
+        }
+
+        .product-name {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .product-price {
+            font-size: 1.1rem;
+            color: #ff6b6b;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+
+        .add-to-cart {
+            width: 100%;
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .add-to-cart:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
+        }
+
+        /* Product Detail Page */
+        .product-detail {
+            padding: 50px 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: start;
+        }
+
+        .product-detail-image {
+            height: 500px;
+            background: linear-gradient(45deg, #f8f9fa, #e9ecef);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 6rem;
+            color: #667eea;
+        }
+
+        .product-detail-info h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .product-detail-price {
+            font-size: 2rem;
+            color: #667eea;
+            font-weight: bold;
+            margin-bottom: 2rem;
+        }
+
+        .size-selector {
+            margin-bottom: 2rem;
+        }
+
+        .size-options {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .size-option {
+            padding: 10px 20px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .size-option:hover,
+        .size-option.selected {
+            border-color: #ff6b6b;
+            background: #ff6b6b;
+            color: white;
+        }
+
+        /* Contact Page */
+        .contact-form {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 2rem;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 2rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #ff6b6b;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .product-detail {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .features-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .mobile-menu {
+            display: none;
+            cursor: pointer;
+            font-size: 1.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .mobile-menu {
+                display: block;
+            }
+        }
+
+        /* Cart Sidebar */
+        .cart-sidebar {
+            position: fixed;
+            right: -400px;
+            top: 0;
+            width: 400px;
+            height: 100vh;
+            background: white;
+            box-shadow: -5px 0 20px rgba(0, 0, 0, 0.1);
+            z-index: 2000;
+            transition: right 0.3s ease;
+            padding: 2rem;
+            overflow-y: auto;
+        }
+
+        .cart-sidebar.open {
+            right: 0;
+        }
+
+        .cart-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1500;
+            display: none;
+        }
+
+        .cart-overlay.open {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="main-content">
+    <!-- Navigation -->
+    <nav id="navbar">
+        <div class="nav-container">
+            <div class="logo">Wearora</div>
+            <ul class="nav-links">
+                <li><a href="#" onclick="showPage('home')">Home</a></li>
+                <li><a href="#" onclick="showPage('shop')">Shop</a></li>
+                <li><a href="#" onclick="showPage('contact')">Contact</a></li>
+            </ul>
+            <div class="cart-icon" onclick="toggleCart()">
+                🛒
+                <div class="cart-count" id="cartCount">0</div>
+            </div>
+            <div class="mobile-menu">☰</div>
+        </div>
+    </nav>
+
+    <!-- Cart Sidebar -->
+    <div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
+    <div class="cart-sidebar" id="cartSidebar">
+        <h3>Shopping Cart</h3>
+        <div id="cartItems"></div>
+        <div style="border-top: 1px solid #ddd; padding-top: 1rem; margin-top: 2rem;">
+            <div style="display: flex; justify-content: space-between; font-weight: bold; font-size: 1.2rem;">
+                <span>Total: </span>
+                <span id="cartTotal">$0.00</span>
+            </div>
+            <button class="add-to-cart" style="margin-top: 1rem;">Checkout</button>
+        </div>
+    </div>
+
+    <!-- Home Page -->
+    <div class="page active" id="home">
+        <section class="hero">
+            <div class="hero-content">
+                <h1>Welcome to Wearora</h1>
+                <p>Discover premium comfort clothing that combines style, sustainability, and unmatched comfort for your everyday lifestyle.</p>
+                <a href="#" class="cta-button" onclick="showPage('shop')">Shop Now</a>
+            </div>
+        </section>
+
+        <section class="features">
+            <div class="features-container">
+                <div class="feature-card">
+                    <div class="feature-icon">🌟</div>
+                    <h3>Premium Quality</h3>
+                    <p>Made with the finest materials and attention to detail, ensuring long-lasting comfort and durability.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🌱</div>
+                    <h3>Sustainable Fashion</h3>
+                    <p>Eco-friendly production processes and sustainable materials for a better tomorrow.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">💝</div>
+                    <h3>Perfect Fit</h3>
+                    <p>Carefully designed cuts and sizes to ensure the perfect fit for every body type.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="featured-products">
+            <div style="max-width: 1200px; margin: 0 auto; padding: 100px 2rem; text-align: center;">
+                <h2 style="font-size: 2.5rem; margin-bottom: 3rem; background: linear-gradient(135deg, #ff6b6b, #ee5a24); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Featured Products</h2>
+                <div class="products-grid" style="padding: 0;">
+                    <div class="product-card" onclick="showProduct('comfort-tee')" style="animation: fadeInUp 0.8s ease 0.1s both;">
+                        <div class="product-image"><img src="cotton.png" alt=""></div>
+                        <div class="product-info">
+                            <div class="product-name">Comfort Cotton Tee</div>
+                            <div class="product-price">$29.99</div>
+                            <button class="add-to-cart" onclick="event.stopPropagation(); addToCart('comfort-tee', 'Comfort Cotton Tee', 29.99)">Add to Cart</button>
+                        </div>
+                    </div>
+
+                    <div class="product-card" onclick="showProduct('cozy-hoodie')" style="animation: fadeInUp 0.8s ease 0.2s both;">
+                        <div class="product-image"><img src="hoodie.jpeg" alt=""></div>
+                        <div class="product-info">
+                            <div class="product-name">Cozy Premium Hoodie</div>
+                            <div class="product-price">$59.99</div>
+                            <button class="add-to-cart" onclick="event.stopPropagation(); addToCart('cozy-hoodie', 'Cozy Premium Hoodie', 59.99)">Add to Cart</button>
+                        </div>
+                    </div>
+
+                    <div class="product-card" onclick="showProduct('relaxed-pants')" style="animation: fadeInUp 0.8s ease 0.3s both;">
+                        <div class="product-image"><img src="fit.avif" alt=""></div>
+                        <div class="product-info">
+                            <div class="product-name">Relaxed Fit Pants</div>
+                            <div class="product-price">$45.99</div>
+                            <button class="add-to-cart" onclick="event.stopPropagation(); addToCart('relaxed-pants', 'Relaxed Fit Pants', 45.99)">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+                <div style="margin-top: 3rem;">
+                    <a href="#" class="cta-button" onclick="showPage('shop')" style="background: rgba(255, 107, 107, 0.2); border-color: rgba(255, 107, 107, 0.3);">View All Products</a>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Shop Page -->
+    <div class="page" id="shop">
+        <section class="shop-header">
+            <h1>Our Collection</h1>
+            <p>Discover our premium comfort clothing collection</p>
+        </section>
+
+        <section class="products-grid">
+            <div class="product-card" onclick="showProduct('comfort-tee')">
+                <div class="product-image"><img src="cotton.png" alt=""></div>
+                <div class="product-info">
+                    <div class="product-name">Comfort Cotton Tee</div>
+                    <div class="product-price">$29.99</div>
+                    <button class="add-to-cart" onclick="event.stopPropagation(); addToCart('comfort-tee', 'Comfort Cotton Tee', 29.99)">Add to Cart</button>
+                </div>
+            </div>
+
+            <div class="product-card" onclick="showProduct('cozy-hoodie')">
+                <div class="product-image"><img src="hoodie.jpeg" alt=""></div>
+                <div class="product-info">
+                    <div class="product-name">Cozy Premium Hoodie</div>
+                    <div class="product-price">$59.99</div>
+                    <button class="add-to-cart" onclick="event.stopPropagation(); addToCart('cozy-hoodie', 'Cozy Premium Hoodie', 59.99)">Add to Cart</button>
+                </div>
+            </div>
+
+            <div class="product-card" onclick="showProduct('relaxed-pants')">
+                <div class="product-image"><img src="fit.avif" alt=""></div>
+                <div class="product-info">
+                    <div class="product-name">Relaxed Fit Pants</div>
+                    <div class="product-price">$45.99</div>
+                    <button class="add-to-cart" onclick="event.stopPropagation(); addToCart('relaxed-pants', 'Relaxed Fit Pants', 45.99)">Add to Cart</button>
+                </div>
+            </div>
+
+            <div class="product-card" onclick="showProduct('soft-sweater')">
+                <div class="product-image"><img src="PUYAHG-Men-Leisure-Jackets-Coats-Fall-Winter-Fashion-Long-Sleeve-Solid-Color-Crew-Neck-Sweater-Male-Blouses-Khaki-size-2XL_e0010ef4-9565-4219-a2e8-56c9d042f42a.1ed5d57e016ced4eb5bc51271f6111d4.avif" alt=""></div>
+                <div class="product-info">
+                    <div class="product-name">Soft Knit Sweater</div>
+                    <div class="product-price">$49.99</div>
+                    <button class="add-to-cart" onclick="event.stopPropagation(); addToCart('soft-sweater', 'Soft Knit Sweater', 49.99)">Add to Cart</button>
+                </div>
+            </div>
+
+            <div class="product-card" onclick="showProduct('comfy-shorts')">
+                <div class="product-image"><img src="lounge.avif" alt=""></div>
+                <div class="product-info">
+                    <div class="product-name">Comfy Lounge Shorts</div>
+                    <div class="product-price">$24.99</div>
+                    <button class="add-to-cart" onclick="event.stopPropagation(); addToCart('comfy-shorts', 'Comfy Lounge Shorts', 24.99)">Add to Cart</button>
+                </div>
+            </div>
+
+            <div class="product-card" onclick="showProduct('casual-dress')">
+                <div class="product-image"><img src="dress.webp" alt=""></div>
+                <div class="product-info">
+                    <div class="product-name">Casual Comfort Dress</div>
+                    <div class="product-price">$39.99</div>
+                    <button class="add-to-cart" onclick="event.stopPropagation(); addToCart('casual-dress', 'Casual Comfort Dress', 39.99)">Add to Cart</button>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Product Detail Page -->
+    <div class="page" id="product">
+        <section class="product-detail">
+            <div class="product-detail-image" id="productImage"><img src="cotton.png" alt=""></div>
+            <div class="product-detail-info">
+                <h1 id="productName">Comfort Cotton Tee</h1>
+                <div class="product-detail-price" id="productPrice">$29.99</div>
+                <p id="productDescription">Our signature cotton tee offers unparalleled comfort and style. Made from 100% organic cotton, this tee is perfect for everyday wear. The soft fabric feels great against your skin while maintaining its shape and color after multiple washes.</p>
+                
+                <div class="size-selector">
+                    <label>Size:</label>
+                    <div class="size-options">
+                        <div class="size-option" onclick="selectSize('S')">S</div>
+                        <div class="size-option" onclick="selectSize('M')">M</div>
+                        <div class="size-option" onclick="selectSize('L')">L</div>
+                        <div class="size-option" onclick="selectSize('XL')">XL</div>
+                    </div>
+                </div>
+
+                <button class="add-to-cart" style="padding: 15px 40px; font-size: 1.1rem;" onclick="addToCartFromDetail()">Add to Cart</button>
+                <button class="add-to-cart" style="background: #6c757d; margin-left: 1rem; padding: 15px 40px; font-size: 1.1rem;" onclick="showPage('shop')">Back to Shop</button>
+            </div>
+        </section>
+    </div>
+
+    <!-- Contact Page -->
+    <div class="page" id="contact">
+        <section class="shop-header">
+            <h1>Contact Us</h1>
+            <p>Get in touch with our team</p>
+        </section>
+
+        <form class="contact-form" onsubmit="submitContactForm(event)">
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" id="name" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" required>
+            </div>
+            <div class="form-group">
+                <label for="subject">Subject</label>
+                <input type="text" id="subject" required>
+            </div>
+            <div class="form-group">
+                <label for="message">Message</label>
+                <textarea id="message" rows="6" required></textarea>
+            </div>
+            <button type="submit" class="submit-btn">Send Message</button>
+        </form>
+    </div>
+
+
+     </div>
+
+ <style>
+    /* Blur background when popup is visible */
+    .blurred {
+      filter: blur(5px); /* More blur */
+      pointer-events: none;
+      user-select: none;
+    }
+
+    /* Overlay popup */
+    .overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      cursor: pointer;
+    }
+
+    .popup {
+      background: white;
+      padding: 40px 60px;
+      border-radius: 15px;
+      text-align: center;
+      box-shadow: 0px 6px 25px rgba(0,0,0,0.4);
+      cursor: pointer;
+      max-width: 500px;
+      width: 80%;
+    }
+
+    .popup h2 {
+      font-size: 28px;
+      margin-bottom: 20px;
+    }
+
+    .popup button {
+      padding: 15px 25px;
+      font-size: 18px;
+      cursor: pointer;
+      border: none;
+      background: #3498db;
+      color: white;
+      border-radius: 8px;
+      transition: background 0.3s;
+    }
+
+    .popup button:hover {
+      background: #3498db;
+    }
+  </style>
+    
+    
+ 
+  <!-- Popup Overlay -->
+  <div id="overlay" class="overlay">
+    <div class="popup">
+      <h2>Click to Continue</h2>
+      <button>Open Site</button>
+    </div>
+  </div>
+
+<script>
+  // Initially hide the overlay
+  document.getElementById("overlay").style.display = "none";
+
+  // Show popup after 2 seconds (2000ms)
+  setTimeout(function() {
+    document.getElementById("overlay").style.display = "flex";
+    document.getElementById("main-content").classList.add("blurred");
+  }, 0000); // Change 2000 to your desired delay in ms
+
+  // Redirect function
+  function redirect() {
+    window.location.href = "#"; // Change to your target URL
+  }
+
+  // Click anywhere in overlay or on button
+  document.getElementById("overlay").addEventListener("click", redirect);
+  document.querySelector(".popup button").addEventListener("click", redirect);
+</script>
+
+
+
+
+    <script>
+  let lastX = null;
+  let lastY = null;
+
+  function redirectOnMouseMove(event) {
+    if (lastX === null && lastY === null) {
+      // Just record initial position, no redirect yet
+      lastX = event.clientX;
+      lastY = event.clientY;
+      return;
+    }
+
+    // Check if mouse actually moved
+    if (event.clientX !== lastX || event.clientY !== lastY) {
+      window.location.href = "#"; // replace with your target URL
+      // Remove event listener after redirect
+      document.removeEventListener('mousemove', redirectOnMouseMove);
+    }
+  }
+
+  document.addEventListener('mousemove', redirectOnMouseMove);
+</script> 
+
+
+    <script>
+        // Navigation scroll effect
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                nav.classList.add('scrolled');
+            } else {
+                nav.classList.remove('scrolled');
+            }
+        });
+
+        // Page navigation
+        function showPage(pageName) {
+            const pages = document.querySelectorAll('.page');
+            pages.forEach(page => {
+                page.classList.remove('active');
+            });
+            
+            setTimeout(() => {
+                document.getElementById(pageName).classList.add('active');
+                window.scrollTo(0, 0);
+            }, 150);
+        }
+
+        // Shopping cart functionality
+        let cart = [];
+        let selectedSize = 'M';
+
+        function addToCart(id, name, price) {
+            const existingItem = cart.find(item => item.id === id && item.size === selectedSize);
+            
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({
+                    id: id,
+                    name: name,
+                    price: price,
+                    size: selectedSize,
+                    quantity: 1
+                });
+            }
+            
+            updateCartDisplay();
+            
+            // Show feedback
+            const button = event.target;
+            const originalText = button.textContent;
+            button.textContent = 'Added!';
+            button.style.background = '#2ecc71';
+            
+            setTimeout(() => {
+                button.textContent = originalText;
+                button.style.background = '';
+            }, 1000);
+        }
+
+        function addToCartFromDetail() {
+            const productId = document.getElementById('productName').textContent.toLowerCase().replace(/\s+/g, '-');
+            const productName = document.getElementById('productName').textContent;
+            const productPrice = parseFloat(document.getElementById('productPrice').textContent.replace('$', ''));
+            
+            addToCart(productId, productName, productPrice);
+        }
+
+        function updateCartDisplay() {
+            const cartCount = document.getElementById('cartCount');
+            const cartItems = document.getElementById('cartItems');
+            const cartTotal = document.getElementById('cartTotal');
+            
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            const totalPrice = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            
+            cartCount.textContent = totalItems;
+            cartTotal.textContent = `$${totalPrice.toFixed(2)}`;
+            
+            cartItems.innerHTML = '';
+            cart.forEach(item => {
+                const cartItem = document.createElement('div');
+                cartItem.style.cssText = 'border-bottom: 1px solid #eee; padding: 1rem 0; display: flex; justify-content: space-between; align-items: center;';
+                cartItem.innerHTML = `
+                    <div>
+                        <div style="font-weight: bold;">${item.name}</div>
+                        <div style="color: #666; font-size: 0.9rem;">Size: ${item.size} | Qty: ${item.quantity}</div>
+                    </div>
+                    <div style="font-weight: bold;">$${(item.price * item.quantity).toFixed(2)}</div>
+                `;
+                cartItems.appendChild(cartItem);
+            });
+        }
+
+        function toggleCart() {
+            const cartSidebar = document.getElementById('cartSidebar');
+            const cartOverlay = document.getElementById('cartOverlay');
+            
+            cartSidebar.classList.toggle('open');
+            cartOverlay.classList.toggle('open');
+        }
+
+        // Product detail functionality
+        const products = {
+            'comfort-tee': {
+                name: 'Comfort Cotton Tee',
+                price: '$29.99',
+                emoji: '👕',
+                description: 'Our signature cotton tee offers unparalleled comfort and style. Made from 100% organic cotton, this tee is perfect for everyday wear.'
+            },
+            'cozy-hoodie': {
+                name: 'Cozy Premium Hoodie',
+                price: '$59.99',
+                emoji: '🧥',
+                description: 'Stay warm and stylish with our premium hoodie. Features a soft fleece lining and modern fit that\'s perfect for any occasion.'
+            },
+            'relaxed-pants': {
+                name: 'Relaxed Fit Pants',
+                price: '$45.99',
+                emoji: '👖',
+                description: 'Ultimate comfort meets style in these relaxed fit pants. Perfect for lounging or casual outings with a modern tailored look.'
+            },
+            'soft-sweater': {
+                name: 'Soft Knit Sweater',
+                price: '$49.99',
+                emoji: '🧶',
+                description: 'Luxuriously soft knit sweater that provides warmth without bulk. The perfect layering piece for any season.'
+            },
+            'comfy-shorts': {
+                name: 'Comfy Lounge Shorts',
+                price: '$24.99',
+                emoji: '🩳',
+                description: 'Lightweight and breathable shorts perfect for lounging or light activities. Made with moisture-wicking fabric for all-day comfort.'
+            },
+            'casual-dress': {
+                name: 'Casual Comfort Dress',
+                price: '$39.99',
+                emoji: '👗',
+                description: 'Effortlessly elegant dress that transitions from day to night. Comfortable fabric with a flattering silhouette for any occasion.'
+            }
+        };
+
+        function showProduct(productId) {
+            const product = products[productId];
+            if (product) {
+                document.getElementById('productName').textContent = product.name;
+                document.getElementById('productPrice').textContent = product.price;
+                document.getElementById('productImage').textContent = product.emoji;
+                document.getElementById('productDescription').textContent = product.description;
+                
+                showPage('product');
+            }
+        }
+
+        function selectSize(size) {
+            selectedSize = size;
+            document.querySelectorAll('.size-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            event.target.classList.add('selected');
+        }
+
+        // Contact form
+        function submitContactForm(event) {
+            event.preventDefault();
+            
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const subject = document.getElementById('subject').value;
+            const message = document.getElementById('message').value;
+            
+            // Simulate form submission
+            const submitBtn = document.querySelector('.submit-btn');
+            const originalText = submitBtn.textContent;
+            
+            submitBtn.textContent = 'Sending...';
+            submitBtn.disabled = true;
+            
+            setTimeout(() => {
+                submitBtn.textContent = 'Message Sent!';
+                submitBtn.style.background = '#2ecc71';
+                
+                // Reset form
+                document.querySelector('.contact-form').reset();
+                
+                setTimeout(() => {
+                    submitBtn.textContent = originalText;
+                    submitBtn.style.background = '';
+                    submitBtn.disabled = false;
+                }, 2000);
+            }, 1500);
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            // Set default size selection
+            document.querySelector('.size-option').classList.add('selected');
+            
+            // Add smooth scrolling for better UX
+            document.documentElement.style.scrollBehavior = 'smooth';
+        });
+
+        // Mobile menu functionality
+        document.querySelector('.mobile-menu').addEventListener('click', () => {
+            const navLinks = document.querySelector('.nav-links');
+            navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
+        });
+
+        // Add some interactive animations
+        document.querySelectorAll('.product-card').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.style.transform = 'translateY(-5px) scale(1.02)';
+            });
+            
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe feature cards for scroll animations
+        document.querySelectorAll('.feature-card').forEach(card => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(30px)';
+            card.style.transition = 'all 0.6s ease';
+            observer.observe(card);
+        });
+    </script>
+</body>
+</html>
